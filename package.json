@@ -1,0 +1,23 @@
+{
+  "name": "@mknapik/rxjs-extensions",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "repository": "git@gitlab.com:mknapik/rxjs-extensions.git",
+  "author": "Michał Knapik",
+  "license": false,
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "compile": "tsc -p .",
+    "compile:watch": "tsc --watch -p .",
+    "lint": "prettier --list-different '**/*.{ts,js}'",
+    "lint:fix": "prettier --write '**/*.{ts,js}'"
+  },
+  "peerDependencies": {
+    "rxjs": "^6.4.0"
+  },
+  "devDependencies": {
+    "prettier": "^1.17.0",
+    "typescript": "^3.4.4"
+  }
+}

@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "strict": true,
-    "target": "es2016",
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "preserveConstEnums": true,
     "removeComments": true,
     "sourceMap": true,
+    "declaration": true,
     "outDir": "dist",
     "lib": [
       "es2016"

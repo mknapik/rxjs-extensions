@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-* Compile in prepack step
+* Include TS types
 
 ## [0.1.0] – 2019-04-22
 

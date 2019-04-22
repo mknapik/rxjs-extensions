@@ -11,13 +11,15 @@
     "compile": "tsc -p .",
     "compile:watch": "tsc --watch -p .",
     "lint": "prettier --list-different '**/*.{ts,js}'",
-    "lint:fix": "prettier --write '**/*.{ts,js}'"
+    "lint:fix": "prettier --write '**/*.{ts,js}'",
+    "prepack": "npm run compile"
   },
   "peerDependencies": {
     "rxjs": "^6.4.0"
   },
   "devDependencies": {
     "prettier": "^1.17.0",
+    "rxjs": "^6.4.0",
     "typescript": "^3.4.4"
   }
 }

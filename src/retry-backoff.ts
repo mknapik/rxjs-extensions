@@ -19,6 +19,15 @@ export interface RetryBackoffConfig<E> {
   tag?: string
 }
 
+type LogFunction = (...args: any[]) => void
+
+interface Logger {
+  error: LogFunction
+  warn: LogFunction
+  info: LogFunction
+  debug: LogFunction
+  trace: LogFunction
+}
 /**
  * Returns an Observable that mirrors the source Observable with the exception
  * of an error. If the source Observable calls error, rather than propagating
@@ -27,7 +36,7 @@ export interface RetryBackoffConfig<E> {
  * resubscriptions (if provided). Retry can be cancelled at any point if
  * cancelRetry condition is met.
  */
-function retryBackoff(logger: {[key: string]: <T>(...args: T[]) => void}) {
+function retryBackoff(logger: Logger) {
   return function<E>(
     config: number | RetryBackoffConfig<E>
   ): <T>(source: Observable<T>) => Observable<T> {

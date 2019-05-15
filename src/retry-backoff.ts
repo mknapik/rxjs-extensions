@@ -23,10 +23,6 @@ type LogFunction = (...args: any[]) => void
 
 interface Logger {
   error: LogFunction
-  warn: LogFunction
-  info: LogFunction
-  debug: LogFunction
-  trace: LogFunction
 }
 /**
  * Returns an Observable that mirrors the source Observable with the exception

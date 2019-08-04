@@ -1,8 +1,8 @@
 {
   "name": "@mknapik/rxjs-extensions",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "src/index.ts",
   "repository": "git@gitlab.com:mknapik/rxjs-extensions.git",
   "author": "Michał Knapik",
   "license": false,

@@ -21,6 +21,8 @@ export interface RetryBackoffConfig<E> {
 
 type LogFunction = (...args: any[]) => void
 
+const formatError = <T extends Error>({message, name, stack}: T) => ({message, name, stack})
+
 interface Logger {
   error: LogFunction
 }
@@ -50,7 +52,7 @@ function retryBackoff(logger: Logger) {
           zip(errors, interval(0)).pipe(
             // [error, i] come from 'errors' observable
             tap(([error, i]) =>
-              logger.error({label: 'retry', tag, error, count: i})
+              logger.error({label: 'retry', tag, error: formatError(error), count: i})
             ),
             concatMap(([error, i]) =>
               iif(

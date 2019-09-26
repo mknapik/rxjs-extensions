@@ -1,5 +1,5 @@
 import {iif, interval, Observable, throwError, timer, zip} from 'rxjs'
-import {concatMap, retryWhen, tap} from 'rxjs/operators'
+import {concatMap, retryWhen} from 'rxjs/operators'
 
 function getDelay(backoffDelay: number, maxInterval: number) {
   return Math.min(backoffDelay, maxInterval)
@@ -19,13 +19,6 @@ export interface RetryBackoffConfig<E> {
   tag?: string
 }
 
-type LogFunction = (...args: any[]) => void
-
-const formatError = <T extends Error>({message, name, stack}: T) => ({message, name, stack})
-
-interface Logger {
-  error: LogFunction
-}
 /**
  * Returns an Observable that mirrors the source Observable with the exception
  * of an error. If the source Observable calls error, rather than propagating
@@ -34,37 +27,32 @@ interface Logger {
  * resubscriptions (if provided). Retry can be cancelled at any point if
  * cancelRetry condition is met.
  */
-function retryBackoff(logger: Logger) {
-  return function<E>(
-    config: number | RetryBackoffConfig<E>
-  ): <T>(source: Observable<T>) => Observable<T> {
-    const {
-      initialInterval,
-      maxAttempts = Infinity,
-      maxInterval = Infinity,
-      cancelRetry = () => false,
-      backoffDelay = defaultBackoffDelay,
-      tag = undefined
-    } = typeof config === 'number' ? {initialInterval: config} : config
-    return <T>(source: Observable<T>) =>
-      source.pipe(
-        retryWhen<T>(errors =>
-          zip(errors, interval(0)).pipe(
-            // [error, i] come from 'errors' observable
-            tap(([error, i]) =>
-              logger.error({label: 'retry', tag, error: formatError(error), count: i})
-            ),
-            concatMap(([error, i]) =>
-              iif(
-                () => i < maxAttempts && !cancelRetry(error),
-                timer(getDelay(backoffDelay(i, initialInterval), maxInterval)),
-                throwError(error)
-              )
+function retryBackoff<E>(
+  config: number | RetryBackoffConfig<E>
+): <T>(source: Observable<T>) => Observable<T> {
+  const {
+    initialInterval,
+    maxAttempts = Infinity,
+    maxInterval = Infinity,
+    cancelRetry = () => false,
+    backoffDelay = defaultBackoffDelay,
+    tag = undefined
+  } = typeof config === 'number' ? {initialInterval: config} : config
+  return <T>(source: Observable<T>) =>
+    source.pipe(
+      retryWhen<T>(errors =>
+        zip(errors, interval(0)).pipe(
+          // [error, i] come from 'errors' observable
+          concatMap(([error, i]) =>
+            iif(
+              () => i < maxAttempts && !cancelRetry(error),
+              timer(getDelay(backoffDelay(i, initialInterval), maxInterval)),
+              throwError(error)
             )
           )
         )
       )
-  }
+    )
 }
 
 export default retryBackoff
